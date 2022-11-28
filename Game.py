@@ -101,13 +101,6 @@ class Game:
     def add_edge(self, edge):
         self.edges.append(edge)
 
-    def add_edge_if_possible(self, edge):
-        if self.is_edge_between_islands(edge) and not self.is_edge_interfering_with_edge(
-                edge) and not self.is_edge_between_more_than_two_islands(edge):
-            self.add_edge(edge)
-            return True
-        return False
-
     def remove_edge(self, edge):
         self.edges.remove(edge)
 
@@ -127,4 +120,22 @@ class Game:
                 return False
         return True
 
-    # TODO: Add support for double edges
+    def specific_edge_count(self, edge):
+        count = 0
+        for e in self.edges:
+            if e.point1 == edge.point1 and e.point2 == edge.point2 or \
+                    e.point1 == edge.point2 and e.point2 == edge.point1:
+                count += 1
+        return count
+
+    def add_edge_if_possible(self, edge):
+        if self.is_edge_between_islands(edge) \
+                and not self.is_edge_interfering_with_edge(edge) \
+                and not self.is_edge_between_more_than_two_islands(edge) \
+                and self.specific_edge_count(edge) < 2:
+            self.add_edge(edge)
+            return True
+        return False
+
+    def is_double_edge(self, edge):
+        return self.specific_edge_count(edge) == 2
