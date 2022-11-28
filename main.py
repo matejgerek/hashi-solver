@@ -1,6 +1,11 @@
-# import Game from game
 from Game import Game
+from ConsoleGui import ConsoleGui
 
-game = Game(7)
-game.generate_random_board()
-print(game.get_board())
+# import json from games/game1.json
+import json
+
+game_data = json.JSONDecoder().decode(open("games/game1.json").read())
+
+game = Game(game_data['size'], game_data['islands'])
+gui = ConsoleGui(game)
+gui.play()
