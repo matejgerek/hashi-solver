@@ -98,7 +98,7 @@ class Game:
                 return edge
         return None
 
-    def add_edge(self, edge):
+    def __add_edge(self, edge):
         self.edges.append(edge)
 
     def remove_edge(self, edge):
@@ -133,7 +133,7 @@ class Game:
                 and not self.is_edge_interfering_with_edge(edge) \
                 and not self.is_edge_between_more_than_two_islands(edge) \
                 and self.specific_edge_count(edge) < 2:
-            self.add_edge(edge)
+            self.__add_edge(edge)
             return True
         return False
 
