@@ -11,7 +11,7 @@ def print_island(island):
 
 
 def get_point_from_input(message):
-    print(message, " (x,y):")
+    print(message, " (x,y): ", end="")
     point = input()
     return Point(int(point[0]), int(point[2]))
 
