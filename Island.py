@@ -14,3 +14,13 @@ class Island(Point):
 
     def get_value(self):
         return self.value
+
+    def is_vertical_neighbour(self, island):
+        return self.x == island.x
+
+    def is_horizontal_neighbour(self, island):
+        return self.y == island.y
+
+    def is_neighbour(self, island):
+        return self.is_vertical_neighbour(island) \
+               or self.is_horizontal_neighbour(island)

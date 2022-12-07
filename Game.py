@@ -139,3 +139,10 @@ class Game:
 
     def is_double_edge(self, edge):
         return self.specific_edge_count(edge) == 2
+
+    def get_neighbours(self, island):
+        neighbours = []
+        for otherIsland in self.get_islands():
+            if island != otherIsland and island.is_neighbour(otherIsland):
+                neighbours.append(otherIsland)
+        return neighbours
