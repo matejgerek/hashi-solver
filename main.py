@@ -4,7 +4,7 @@ from ConsoleGui import ConsoleGui
 # import json from games/game1.json
 import json
 
-game_data = json.JSONDecoder().decode(open("games/game1.json").read())
+game_data = json.JSONDecoder().decode(open("games/game2.json").read())
 
 game = Game(game_data['size'], game_data['islands'])
 gui = ConsoleGui(game)

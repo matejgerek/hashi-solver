@@ -41,8 +41,18 @@ class ConsoleGui:
             print("|", end="")
 
     def draw_board(self):
+        # show column number
+        print_space()
         for y in range(self.game.get_size()):
+            print_space()
+            print(y, end="")
+        print(" " + "x")
+
+        for y in range(self.game.get_size()):
+            # show line number
+            print(y, end="")
             for x in range(self.game.get_size()):
+                print_space()
                 if self.game.is_island_at_position(x, y):
                     print_island(self.game.get_island_at_position(x, y))
                 elif self.game.is_edge_at_position(x, y):
@@ -50,6 +60,7 @@ class ConsoleGui:
                 else:
                     print_space()
             print()
+        print('y')
         print()
 
     def play(self):
