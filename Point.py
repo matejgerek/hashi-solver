@@ -17,3 +17,6 @@ class Point:
 
     def get_position(self):
         return self.x, self.y
+
+    def is_equal(self, other):
+        return self.x == other.x and self.y == other.y
