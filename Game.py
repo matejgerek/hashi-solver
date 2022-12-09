@@ -162,9 +162,20 @@ class Game:
             neighbours.append(edge.get_other_island(island))
         return neighbours
 
+    def is_island_connection_viable(self, island1, island2):
+        return island1.is_neighbour(island2) and len(
+            self.get_connected_neighbours(island1)) < island1.get_value() and len(
+            self.get_connected_neighbours(island2)) < island2.get_value()
+
     def get_unconnected_neighbours(self, island):
         neighbours = []
         for neighbour in self.get_neighbours(island):
-            if neighbour not in self.get_connected_neighbours(island):
+            if self.is_island_connection_viable(island, neighbour):
                 neighbours.append(neighbour)
         return neighbours
+
+    def is_solved(self):
+        for island in self.get_islands():
+            if island.get_value() != len(self.get_connected_neighbours(island)):
+                return False
+        return True
