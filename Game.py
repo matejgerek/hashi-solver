@@ -1,5 +1,6 @@
 from Island import Island
 from Point import Point
+from Edge import Edge
 
 
 class Game:
@@ -34,8 +35,6 @@ class Game:
     def is_edge_between_islands(self, edge):
         return edge.point1 in self.get_islands_positions() \
                and edge.point2 in self.get_islands_positions()
-
-    # check if only one point is in some edge
 
     def get_vertical_edges(self):
         vertical_edges = []
@@ -137,6 +136,9 @@ class Game:
             return True
         return False
 
+    def connect_islands(self, island1, island2):
+        self.add_edge_if_possible(Edge(island1, island2))
+
     def is_double_edge(self, edge):
         return self.specific_edge_count(edge) == 2
 
@@ -145,4 +147,24 @@ class Game:
         for otherIsland in self.get_islands():
             if island != otherIsland and island.is_neighbour(otherIsland):
                 neighbours.append(otherIsland)
+        return neighbours
+
+    def get_island_edges(self, island):
+        edges = []
+        for edge in self.get_edges():
+            if edge.is_connected_to_island(island):
+                edges.append(edge)
+        return edges
+
+    def get_connected_neighbours(self, island):
+        neighbours = []
+        for edge in self.get_island_edges(island):
+            neighbours.append(edge.get_other_island(island))
+        return neighbours
+
+    def get_unconnected_neighbours(self, island):
+        neighbours = []
+        for neighbour in self.get_neighbours(island):
+            if neighbour not in self.get_connected_neighbours(island):
+                neighbours.append(neighbour)
         return neighbours

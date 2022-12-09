@@ -44,3 +44,13 @@ class Edge:
 
     def get_points(self):
         return [self.point1] + self.get_points_between() + [self.point2]
+
+    def is_connected_to_island(self, island):
+        return self.point1.is_equal(island) or self.point2.is_equal(island)
+
+    def get_other_island(self, island):
+        if island.is_equal(self.point1):
+            return self.point2
+        elif island.is_equal(self.point2):
+            return self.point1
+        return None
