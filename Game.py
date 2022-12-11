@@ -17,6 +17,9 @@ class Game:
     def __repr__(self):
         return str(self.islands) + str(self.edges)
 
+    def reset(self):
+        self.edges = []
+
     def add_island(self, island):
         self.islands.append(island)
 
@@ -71,7 +74,7 @@ class Game:
         return islands
 
     def is_edge_between_more_than_two_islands(self, edge):
-        return len(self.__get_islands_between(edge)) > 2
+        return len(self.__get_islands_between(edge)) > 0
 
     def is_island_at_position(self, x, y):
         for island in self.islands:
@@ -137,7 +140,11 @@ class Game:
         return False
 
     def connect_islands(self, island1, island2):
-        self.add_edge_if_possible(Edge(island1, island2))
+        is_island1_viable = island1.get_value() > len(self.get_island_edges(island1))
+        is_island2_viable = island2.get_value() > len(self.get_island_edges(island2))
+        if is_island1_viable and is_island2_viable:
+            return self.add_edge_if_possible(Edge(island1, island2))
+        return False
 
     def is_double_edge(self, edge):
         return self.specific_edge_count(edge) == 2
@@ -163,19 +170,36 @@ class Game:
         return neighbours
 
     def is_island_connection_viable(self, island1, island2):
-        return island1.is_neighbour(island2) and len(
-            self.get_connected_neighbours(island1)) < island1.get_value() and len(
-            self.get_connected_neighbours(island2)) < island2.get_value()
+        return island1.is_neighbour(island2) \
+               and len(self.get_connected_neighbours(island1)) < island1.get_value() \
+               and len(self.get_connected_neighbours(island2)) < island2.get_value()
 
     def get_unconnected_neighbours(self, island):
         neighbours = []
         for neighbour in self.get_neighbours(island):
-            if self.is_island_connection_viable(island, neighbour):
+            if neighbour not in self.get_connected_neighbours(island):
+                if self.is_island_connection_viable(island, neighbour):
+                    neighbours.append(neighbour)
+                    if island.get_value() > 1 and neighbour.get_value() > 1:
+                        neighbours.append(neighbour)
+        return neighbours
+
+    def get_right_or_bottom_unconnected_neighbours(self, island):
+        neighbours = []
+        for neighbour in self.get_unconnected_neighbours(island):
+            if island.is_below(neighbour) or island.is_at_the_right(neighbour):
+                neighbours.append(neighbour)
+        return neighbours
+
+    def get_right_or_bottom_neighbours(self, island):
+        neighbours = []
+        for neighbour in self.get_neighbours(island):
+            if island.is_below(neighbour) or island.is_at_the_right(neighbour):
                 neighbours.append(neighbour)
         return neighbours
 
     def is_solved(self):
         for island in self.get_islands():
-            if island.get_value() != len(self.get_connected_neighbours(island)):
+            if len(self.get_island_edges(island)) != island.get_value():
                 return False
         return True

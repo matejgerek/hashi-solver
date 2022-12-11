@@ -7,7 +7,7 @@ import json
 
 # print("Zadaj cislo levela(1-2): ", end="")
 # level = input()
-game_data = json.JSONDecoder().decode(open("games/game" + '1' + ".json").read())
+game_data = json.JSONDecoder().decode(open("games/game" + '2' + ".json").read())
 
 game = Game(game_data['size'], game_data['islands'])
 gui = ConsoleGui(game)

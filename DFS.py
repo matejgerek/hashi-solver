@@ -8,20 +8,31 @@ class DFS:
         self.gui = ConsoleGui(game)
 
     def solve(self):
-        self.gui.draw_board()
-        self.dfs(self.game, self.game.get_islands()[0])
-        if self.game.is_game_solved():
-            print("Solved!")
-        else:
-            print("Not solved!")
+        # island = self.game.get_islands()[0]
+
+        i = 0
+        for island in self.game.get_islands():
+            self.game.reset()
+            print("DFS from " + str(island) + " iteration: " + str(i))
+            i += 1
+            print('Solving...')
+            self.dfs(self.game, island)
+            print('---')
+            if self.game.is_game_solved():
+                print("Solved!")
+                self.gui.draw_board()
+                return True
+            else:
+                print("Not solved!")
+            self.gui.draw_board()
 
     def dfs(self, game, starting_island):
         if self.game.is_solved():
             return True
-
-        for island in game.get_unconnected_neighbours(starting_island):
-            if self.game.add_edge_if_possible(Edge(starting_island, island)):
-                self.gui.draw_board()
-                if self.dfs(self.game, island):
+        neighbours = game.get_unconnected_neighbours(starting_island)
+        for neighbour in neighbours:
+            if self.game.connect_islands(starting_island, neighbour):
+                # self.gui.draw_board()
+                if self.dfs(game, neighbour):
                     return True
-                self.gui.draw_board()
+        return False

@@ -20,3 +20,15 @@ class Point:
 
     def is_equal(self, other):
         return self.x == other.x and self.y == other.y
+
+    def is_at_the_right(self, other):
+        return self.x < other.x and self.y == other.y
+
+    def is_at_the_left(self, other):
+        return self.x > other.x and self.y == other.y
+
+    def is_above(self, other):
+        return self.x == other.x and self.y > other.y
+
+    def is_below(self, other):
+        return self.x == other.x and self.y < other.y
