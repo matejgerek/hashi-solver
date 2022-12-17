@@ -41,6 +41,7 @@ class ConsoleGui:
             print("|", end="")
 
     def draw_board(self):
+        print()
         # show column number
         print_space()
         for y in range(self.game.get_size()):
