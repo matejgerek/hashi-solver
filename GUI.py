@@ -5,6 +5,7 @@ import pygame
 black = 0, 0, 0
 white = 255, 255, 255
 red = 255, 0, 0
+blue = 0, 0, 255
 square_width = 50
 square_height = 50
 board_size = 8
@@ -12,7 +13,7 @@ size = width, height = board_size * square_width, board_size * square_height
 
 
 def draw_edge(screen, edge):
-    offset = 10
+    offset = 20
     x1 = square_width * (edge.point1.x + 1)
     y1 = square_height * (edge.point1.y + 1)
     x2 = square_width * (edge.point2.x + 1)
@@ -24,7 +25,7 @@ def draw_edge(screen, edge):
 
 
 def draw_double_edge(screen, edge):
-    offset = 10
+    offset = 20
     x1 = square_width * (edge.point1.x + 1)
     y1 = square_height * (edge.point1.y + 1)
     x2 = square_width * (edge.point2.x + 1)
@@ -37,10 +38,10 @@ def draw_double_edge(screen, edge):
         pygame.draw.line(screen, white, (x1 + 5, y1 + offset), (x2 + 5, y2 - offset), 5)
 
 
-def draw_island(screen, island):
+def draw_island(screen, island, is_current=False):
     island_width = square_width * (island.x + 1) * 2
     island_height = square_height * (island.y + 1) * 2
-    pygame.draw.circle(screen, white, (island_width // 2, island_height // 2), 20)
+    pygame.draw.circle(screen, blue if is_current else white, (island_width // 2, island_height // 2), 20)
     font = pygame.font.Font(None, 36)
     text_render = font.render(str(island.get_value()), 1, red)
     text_width, text_height = text_render.get_size()
