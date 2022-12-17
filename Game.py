@@ -2,33 +2,6 @@ from Island import Island
 from Point import Point
 from Edge import Edge
 
-def dfs(self, visited, graph, root):
-    if root not in visited:
-        print("======================================")
-        print("Visited island: ", end="")
-        print(root)
-        visited.add(root)
-        print("Connected neighbours: ", end="")
-        neighb = {}
-        for island in graph[root]:
-            neighb[island] = self.get_connected_neighbours(island).__len__()
-        neighb = dict(sorted(neighb.items(), key=lambda item: item[1]))
-        print(self.get_connected_neighbours(root).__len__())
-        for neighbour in neighb:
-            if self.is_island_connection_viable(root, neighbour):
-                graph[neighbour] = self.get_direct_neighbours(neighbour)
-                print("-- Connect ", end="")
-                print(root, end="")
-                print(" to ", end="")
-                print(neighbour)
-                print("Direct neighbours : ", end="")
-                print(graph[root].__len__())
-                Game.connect_islands(self, root, neighbour)
-                print("Connected : ", end="")
-                print(self.get_connected_neighbours(root).__len__())
-            if neighbour.value > 1:
-                dfs(self, visited, graph, neighbour)
-
 
 class Game:
     def __init__(self, size, islands):
@@ -261,10 +234,5 @@ class Game:
 
         return direct_neighbours
 
-    def dfs_play_ai(self):
-        visited = set()
-        root = self.islands[0]
-        graph = {root: self.get_direct_neighbours(root)}
-        dfs(self, visited, graph, root)
-        print("Solved: ", end="")
-        print(self.is_game_solved())
+    def reset(self):
+        self.edges = []
