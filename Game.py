@@ -4,22 +4,30 @@ from Edge import Edge
 
 def dfs(self, visited, graph, root):
     if root not in visited:
+        print("======================================")
         print("Visited island: ", end="")
         print(root)
         visited.add(root)
-        neighbour_sorted = sorted(graph[root], key=lambda x: x.value, reverse=False)
-        for neighbour in neighbour_sorted:
-            if self.is_island_connection_viable(root, neighbour) or not visited.__contains__(neighbour):
-                Game.connect_islands(self, root, neighbour)
-                print("Connect ", end="")
+        print("Connected neighbours: ", end="")
+        neighb = {}
+        for island in graph[root]:
+            neighb[island] = self.get_connected_neighbours(island).__len__()
+        neighb = dict(sorted(neighb.items(), key=lambda item: item[1]))
+        print(self.get_connected_neighbours(root).__len__())
+        for neighbour in neighb:
+            if self.is_island_connection_viable(root, neighbour):
+                graph[neighbour] = self.get_direct_neighbours(neighbour)
+                print("-- Connect ", end="")
                 print(root, end="")
                 print(" to ", end="")
                 print(neighbour)
-            else:
-                print(root, end="")
-                print(" cannot connect again with ", end="")
-                print(neighbour)
-            dfs(self, visited, graph, neighbour)
+                print("Direct neighbours : ", end="")
+                print(graph[root].__len__())
+                Game.connect_islands(self, root, neighbour)
+                print("Connected : ", end="")
+                print(self.get_connected_neighbours(root).__len__())
+            if neighbour.value > 1:
+                dfs(self, visited, graph, neighbour)
 
 
 class Game:
@@ -202,24 +210,7 @@ class Game:
     def get_direct_neighbours(self, island):
         direct_neighbours = []
         neighbours = self.get_neighbours(island)
-        column = island.get_position()[0]
-        row = island.get_position()[1]
-        # up
-        while row > 0:
-            row = row - 1
-            for neighbour in neighbours:
-                if Point(column, row) == Point(neighbour.x, neighbour.y):
-                    direct_neighbours.append(neighbour)
-                    row = 0
-        # down
-        column = island.get_position()[0]
-        row = island.get_position()[1]
-        while row < self.size:
-            row = row + 1
-            for neighbour in neighbours:
-                if Point(column, row) == Point(neighbour.x, neighbour.y):
-                    direct_neighbours.append(neighbour)
-                    row = self.size
+
         # left
         column = island.get_position()[0]
         row = island.get_position()[1]
@@ -229,6 +220,21 @@ class Game:
                 if Point(column, row) == Point(neighbour.x, neighbour.y):
                     direct_neighbours.append(neighbour)
                     column = 0
+                if self.is_edge_at_position(column, row):
+                    column = 0
+
+        # up
+        column = island.get_position()[0]
+        row = island.get_position()[1]
+        while row > 0:
+            row = row - 1
+            for neighbour in neighbours:
+                if Point(column, row) == Point(neighbour.x, neighbour.y):
+                    direct_neighbours.append(neighbour)
+                    row = 0
+                if self.is_edge_at_position(column, row):
+                    row = 0
+
         # right
         column = island.get_position()[0]
         row = island.get_position()[1]
@@ -238,14 +244,27 @@ class Game:
                 if Point(column, row) == Point(neighbour.x, neighbour.y):
                     direct_neighbours.append(neighbour)
                     column = self.size
+                if self.is_edge_at_position(column, row):
+                    column = self.size
+
+        # down
+        column = island.get_position()[0]
+        row = island.get_position()[1]
+        while row < self.size:
+            row = row + 1
+            for neighbour in neighbours:
+                if Point(column, row) == Point(neighbour.x, neighbour.y):
+                    direct_neighbours.append(neighbour)
+                    row = self.size
+                if self.is_edge_at_position(column, row):
+                    row = self.size
+
         return direct_neighbours
 
     def dfs_play_ai(self):
         visited = set()
         root = self.islands[0]
-        i = 0
-        graph = {}
-        for island in self.islands:
-            graph[island] = self.get_direct_neighbours(island)
-            i = i + 1
+        graph = {root: self.get_direct_neighbours(root)}
         dfs(self, visited, graph, root)
+        print("Solved: ", end="")
+        print(self.is_game_solved())

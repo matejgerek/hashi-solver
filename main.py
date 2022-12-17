@@ -13,6 +13,7 @@ gui = ConsoleGui(game)
 gui.draw_board()
 Game.dfs_play_ai(game)
 gui.draw_board()
+
 # island1 = game.get_island_at_position(0, 0)
 # island2 = game.get_island_at_position(3, 0)
 # game.connect_islands(island1, island2)
