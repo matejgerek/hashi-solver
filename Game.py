@@ -227,6 +227,9 @@ class Game:
 
         return direct_neighbours
 
+    def get_direct_neighbours_minus_root(self, island, count, root):
+        return self.get_direct_neighbours(island, count).remove(root)
+
     def down_direct_neighbours(self, direct_neighbours, island, neighbours):
         # down
         column = island.get_position()[0]
