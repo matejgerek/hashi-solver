@@ -2,25 +2,6 @@ from Island import Island
 from Point import Point
 from Edge import Edge
 
-def dfs(self, visited, graph, root):
-    if root not in visited:
-        print("Visited island: ", end="")
-        print(root)
-        visited.add(root)
-        neighbour_sorted = sorted(graph[root], key=lambda x: x.value, reverse=False)
-        for neighbour in neighbour_sorted:
-            if self.is_island_connection_viable(root, neighbour) or not visited.__contains__(neighbour):
-                Game.connect_islands(self, root, neighbour)
-                print("Connect ", end="")
-                print(root, end="")
-                print(" to ", end="")
-                print(neighbour)
-            else:
-                print(root, end="")
-                print(" cannot connect again with ", end="")
-                print(neighbour)
-            dfs(self, visited, graph, neighbour)
-
 
 class Game:
     def __init__(self, size, islands):
@@ -199,18 +180,57 @@ class Game:
                 return False
         return True
 
-    def get_direct_neighbours(self, island):
+    def get_direct_neighbours(self, island, count):
         direct_neighbours = []
         neighbours = self.get_neighbours(island)
-        column = island.get_position()[0]
-        row = island.get_position()[1]
-        # up
-        while row > 0:
-            row = row - 1
-            for neighbour in neighbours:
-                if Point(column, row) == Point(neighbour.x, neighbour.y):
-                    direct_neighbours.append(neighbour)
-                    row = 0
+
+        if count == 0:
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 1:
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 2:
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 3:
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 4:
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 5:
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 6:
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+        if count == 7:
+            self.down_direct_neighbours(direct_neighbours, island, neighbours)
+            self.right_direct_neighbours(direct_neighbours, island, neighbours)
+            self.up_direct_neighbours(direct_neighbours, island, neighbours)
+            self.left_direct_neighbours(direct_neighbours, island, neighbours)
+
+        return direct_neighbours
+
+    def get_direct_neighbours_minus_root(self, island, count, root):
+        return self.get_direct_neighbours(island, count).remove(root)
+
+    def down_direct_neighbours(self, direct_neighbours, island, neighbours):
         # down
         column = island.get_position()[0]
         row = island.get_position()[1]
@@ -220,15 +240,10 @@ class Game:
                 if Point(column, row) == Point(neighbour.x, neighbour.y):
                     direct_neighbours.append(neighbour)
                     row = self.size
-        # left
-        column = island.get_position()[0]
-        row = island.get_position()[1]
-        while column > 0:
-            column = column - 1
-            for neighbour in neighbours:
-                if Point(column, row) == Point(neighbour.x, neighbour.y):
-                    direct_neighbours.append(neighbour)
-                    column = 0
+                if self.is_edge_at_position(column, row):
+                    row = self.size
+
+    def right_direct_neighbours(self, direct_neighbours, island, neighbours):
         # right
         column = island.get_position()[0]
         row = island.get_position()[1]
@@ -238,14 +253,34 @@ class Game:
                 if Point(column, row) == Point(neighbour.x, neighbour.y):
                     direct_neighbours.append(neighbour)
                     column = self.size
-        return direct_neighbours
+                if self.is_edge_at_position(column, row):
+                    column = self.size
 
-    def dfs_play_ai(self):
-        visited = set()
-        root = self.islands[0]
-        i = 0
-        graph = {}
-        for island in self.islands:
-            graph[island] = self.get_direct_neighbours(island)
-            i = i + 1
-        dfs(self, visited, graph, root)
+    def up_direct_neighbours(self, direct_neighbours, island, neighbours):
+        # up
+        column = island.get_position()[0]
+        row = island.get_position()[1]
+        while row > 0:
+            row = row - 1
+            for neighbour in neighbours:
+                if Point(column, row) == Point(neighbour.x, neighbour.y):
+                    direct_neighbours.append(neighbour)
+                    row = 0
+                if self.is_edge_at_position(column, row):
+                    row = 0
+
+    def left_direct_neighbours(self, direct_neighbours, island, neighbours):
+        # left
+        column = island.get_position()[0]
+        row = island.get_position()[1]
+        while column > 0:
+            column = column - 1
+            for neighbour in neighbours:
+                if Point(column, row) == Point(neighbour.x, neighbour.y):
+                    direct_neighbours.append(neighbour)
+                    column = 0
+                if self.is_edge_at_position(column, row):
+                    column = 0
+
+    def reset(self):
+        self.edges = []
