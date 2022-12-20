@@ -1,15 +1,21 @@
-import sys
-
 import pygame
 
 black = 0, 0, 0
 white = 255, 255, 255
 red = 255, 0, 0
+green = 0, 255, 0
 blue = 0, 0, 255
 square_width = 50
 square_height = 50
 board_size = 8
 size = width, height = board_size * square_width, board_size * square_height
+
+wait = pygame.time.wait
+
+
+def init_screen():
+    screen = pygame.display.set_mode(size)
+    return screen
 
 
 def draw_edge(screen, edge):
@@ -53,23 +59,16 @@ def draw_island(screen, island, is_current=False):
 class GUI:
     def __init__(self, game):
         self.game = game
-        pygame.init()
-        self.screen = pygame.display.set_mode(size)
+        self.screen = init_screen()
 
-    def play(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
-            if self.game.is_solved():
-                print("Solved!")
-                sys.exit()
-            self.screen.fill(black)
-            for island in self.game.islands:
-                draw_island(self.screen, island)
-            for edge in self.game.edges:
-                if self.game.is_double_edge(edge):
-                    draw_double_edge(self.screen, edge)
-                else:
-                    draw_edge(self.screen, edge)
-            pygame.display.flip()
+    def update(self, current_island):
+        self.screen.fill(black)
+        for edge in self.game.edges:
+            if self.game.is_double_edge(edge):
+                draw_double_edge(self.screen, edge)
+            else:
+                draw_edge(self.screen, edge)
+        for island in self.game.islands:
+            draw_island(self.screen, island, island.is_equal(current_island))
+        pygame.display.flip()
+        wait(300)

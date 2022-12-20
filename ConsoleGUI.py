@@ -23,7 +23,7 @@ def input_edge():
     return edge
 
 
-class ConsoleGui:
+class ConsoleGUI:
     def __init__(self, game):
         self.game = game
 

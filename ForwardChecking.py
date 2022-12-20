@@ -1,21 +1,28 @@
+import sys
 import time
+import pygame
 
 class ForwardChecking:
-    def __init__(self, game):
+    def __init__(self, game, gui):
         self.game = game
         self.visited = set()
         self.island_count_visited = 0
+        self.gui = gui
 
     def solve(self):
         start_time = time.perf_counter()
         count = 0
         while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+
             self.game.reset()
             self.visited.clear()
 
             root = self.game.islands[0]
             graph = {root: self.game.get_direct_neighbours(root, count)}
-            self.forward_checking(graph, root, count)
+            self.forward_checking(graph, root, count, self.gui.update)
             count = count + 1
             if self.game.is_game_solved():
                 print("Game is solved!")
@@ -31,7 +38,8 @@ class ForwardChecking:
         print(f"Opened islands {self.island_count_visited} times ")
         print("-------------------------------------------")
 
-    def forward_checking(self, graph, root, count):
+    def forward_checking(self, graph, root, count, update):
+        update(root)
         if root not in self.visited:
             self.visited.add(root)
             print(f"Visited root {root}")
@@ -46,6 +54,6 @@ class ForwardChecking:
                     graph[neighbour] = self.game.get_direct_neighbours(neighbour, count)
                     self.game.connect_islands(root, neighbour)
                     if neighbour.value > 1:
-                        self.forward_checking(graph, neighbour, count)
+                        self.forward_checking(graph, neighbour, count, update)
                 else:
                     print("Returning back ...")
