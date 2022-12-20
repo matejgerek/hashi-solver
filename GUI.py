@@ -14,39 +14,37 @@ wait = pygame.time.wait
 
 
 def init_screen():
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode([500, 500])
     return screen
 
 
 def draw_edge(screen, edge):
-    offset = 20
-    x1 = square_width * (edge.point1.x + 1)
-    y1 = square_height * (edge.point1.y + 1)
-    x2 = square_width * (edge.point2.x + 1)
-    y2 = square_height * (edge.point2.y + 1)
+    x1 = square_width * edge.point1.x + 25
+    y1 = square_height * edge.point1.y + 25
+    x2 = square_width * edge.point2.x + 25
+    y2 = square_height * edge.point2.y + 25
     if edge.is_horizontal():
-        pygame.draw.line(screen, white, (x1 + offset, y1), (x2 - offset, y2), 5)
+        pygame.draw.line(screen, white, (x1, y1), (x2, y2), 5)
     else:
-        pygame.draw.line(screen, white, (x1, y1 + offset), (x2, y2 - offset), 5)
+        pygame.draw.line(screen, white, (x1, y1), (x2, y2), 5)
 
 
 def draw_double_edge(screen, edge):
-    offset = 20
-    x1 = square_width * (edge.point1.x + 1)
-    y1 = square_height * (edge.point1.y + 1)
-    x2 = square_width * (edge.point2.x + 1)
-    y2 = square_height * (edge.point2.y + 1)
+    x1 = square_width * edge.point1.x + 25
+    y1 = square_height * edge.point1.y + 25
+    x2 = square_width * edge.point2.x + 25
+    y2 = square_height * edge.point2.y + 25
     if edge.is_horizontal():
-        pygame.draw.line(screen, white, (x1 + offset, y1 - 5), (x2 - offset, y2 - 5), 5)
-        pygame.draw.line(screen, white, (x1 + offset, y1 + 5), (x2 - offset, y2 + 5), 5)
+        pygame.draw.line(screen, white, (x1, y1 - 5), (x2, y2 - 5), 5)
+        pygame.draw.line(screen, white, (x1, y1 + 5), (x2, y2 + 5), 5)
     else:
-        pygame.draw.line(screen, white, (x1 - 5, y1 + offset), (x2 - 5, y2 - offset), 5)
-        pygame.draw.line(screen, white, (x1 + 5, y1 + offset), (x2 + 5, y2 - offset), 5)
+        pygame.draw.line(screen, white, (x1 - 5, y1), (x2 - 5, y2), 5)
+        pygame.draw.line(screen, white, (x1 + 5, y1), (x2 + 5, y2), 5)
 
 
 def draw_island(screen, island, is_current=False):
-    island_width = square_width * (island.x + 1) * 2
-    island_height = square_height * (island.y + 1) * 2
+    island_width = square_width * island.x * 2 + 50
+    island_height = square_height * island.y * 2 + 50
     pygame.draw.circle(screen, blue if is_current else white, (island_width // 2, island_height // 2), 20)
     font = pygame.font.Font(None, 36)
     text_render = font.render(str(island.get_value()), 1, red)
