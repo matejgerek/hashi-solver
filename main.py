@@ -1,5 +1,5 @@
 from Game import Game
-from ConsoleGui import ConsoleGui
+from ConsoleGUI import ConsoleGui
 from DFS import DFS
 from Backtracking import Backtracking
 from ForwardChecking import ForwardChecking
