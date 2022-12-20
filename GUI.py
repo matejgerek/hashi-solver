@@ -70,3 +70,14 @@ class GUI:
             draw_island(self.screen, island, island.is_equal(current_island))
         pygame.display.flip()
         wait(300)
+
+    def print_message(self, message):
+        pygame.draw.rect(self.screen, white, (100, 100, 300, 300))
+        font = pygame.font.Font(None, 36)
+        text_render = font.render(message, 1, red)
+        text_width, text_height = text_render.get_size()
+        x = (500 - text_width) // 2
+        y = (500 - text_height) // 2
+        self.screen.blit(text_render, (x, y))
+        pygame.display.flip()
+        wait(1000)

@@ -7,7 +7,7 @@ from GUI import GUI
 # import json from games/game1.json
 import json
 
-print("Zadaj cislo levela(1-2): ", end="")
+print("Zadaj cislo levela(1-5): ", end="")
 level = input()
 game_data = json.JSONDecoder().decode(open("games/game" + level + ".json").read())
 print()

@@ -2,6 +2,7 @@ import sys
 import time
 import pygame
 
+
 class ForwardChecking:
     def __init__(self, game, gui):
         self.game = game
@@ -26,6 +27,7 @@ class ForwardChecking:
             count = count + 1
             if self.game.is_game_solved():
                 print("Game is solved!")
+                self.gui.print_message("Game is solved!")
                 break
             else:
                 print("Game is not solved!")
@@ -34,6 +36,8 @@ class ForwardChecking:
         end_time = time.perf_counter()
         time_duration = (end_time - start_time) * 1000
         print("-------------------------------------------")
+        if not self.game.is_game_solved():
+            self.gui.print_message("Game is not solved!")
         print(f"Forward Checking works {time_duration:0.5f} milliseconds")
         print(f"Opened islands {self.island_count_visited} times ")
         print("-------------------------------------------")

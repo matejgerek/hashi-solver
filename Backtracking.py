@@ -29,6 +29,7 @@ class Backtracking:
             count = count + 1
             if self.game.is_game_solved():
                 print("Game is solved!")
+                self.gui.print_message("Game is solved!")
                 break
             else:
                 print("Game is not solved!")
@@ -36,6 +37,9 @@ class Backtracking:
                 break
         end_time = time.perf_counter()
         time_duration = (end_time - start_time) * 1000
+        if not self.game.is_game_solved():
+            self.gui.print_message("Game is not solved!")
+
         print("-------------------------------------------")
         print(f"Backtracking works {time_duration:0.5f} milliseconds")
         print(f"Opened islands {self.island_count_visited} times ")
