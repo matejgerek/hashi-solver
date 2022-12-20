@@ -2,6 +2,7 @@ import sys
 import time
 import pygame
 
+
 class DFS:
     def __init__(self, game, gui):
         self.game = game
